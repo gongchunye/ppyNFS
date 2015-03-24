@@ -5,7 +5,7 @@ from poly_math import *
 from prime import *
 
 if __name__ == '__main__':
-	semiprimeSize = 80
+	semiprimeSize = 50
 	n = generateLargePrime(semiprimeSize/2)*generateLargePrime(semiprimeSize/2)
 	print "n = %s" % (n)
 	
