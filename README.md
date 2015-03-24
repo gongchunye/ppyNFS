@@ -4,6 +4,7 @@ Number Field Sieve on python
 Where do I begin? the Number Field Sieve (NFS) is the asymptotically fastest integer factorization algorithm known. It is magnitudes more complicated than its younger brother, the Quadratic Sieve. The fact that a very complicated algorithm solves a very simple (conceptually) problem is what give it its appeal (similar to FLT). The algorithms requires LOTS of sub-algorithms, and some code is copied from the implementations scattered throughout the internet. These will eventually be rewritten.
 
 The goal of this project is to write an easy-to-understand implementation to ease learning of NFS-related concepts. Python allows overriding of operators, and supports bignums natively. Here is a snippet of code that shows readability:
+		
 		# Brigg's example
 		nfspoly = Poly([8,29,15,1])
 		NF = NumberField(nfspoly)
