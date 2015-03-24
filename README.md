@@ -24,13 +24,21 @@ The goal of this project is to write an easy-to-understand implementation to eas
 		
 A complete (dirty) implementation of NFS in python is being rewritten to ppyNFS, with the aims of making the code cleaner. Though, I don't claim that this code is tidy. The polynomial and number field logic is mostly rewritten. The main NFS stages that are finished are:
 [X] init
+
 [X] trialdivide
+
 [ ] sieve-line
+
 [ ] filter
+
 [ ] matrix-gauss
+
 [ ] sqrt-couv
 
 Also, stages that were not in the old code but would be nice to have in ppyNFS are:
+
 [ ] matrix-lanc
+
 [ ] sieve-lat
+
 [ ] sqrt-nguy
