@@ -19,7 +19,7 @@ def getRootsModPFast(poly,p):
 	
 	g = NFp(Poly([0,1])) ** p
 	g = g - NFp(Poly([0,1]))
-	g = g.getPoly() #extract element in NFp to normal polynomial
+	g = g.getPoly()
 	g = polynomialGCDModP(g,poly,p)
 		
 	roots.extend(rootsRecurse(g,p))
@@ -38,15 +38,15 @@ def rootsRecurse(g,p):
 	NFp = NumberFieldModP(g,p)
 	
 	while(h.degree() == 0 or g == h):
-		base = Poly([random.randint(0,p),1])
-		base = NFp(base)
+		a = [random.randint(0,p)
+		base = NFp(Poly(a,1]))
 		base = base ** ((p-1)/2)
-		toGCD = base - NFp(Poly([1]))
-		toGCD = toGCD.getPoly()
-		h = polynomialGCDModP(toGCD,g,p)
+		toGCD = base - NFp(Poly([1])) 
+		h = polynomialGCDModP(toGCD.getPoly(),g,p)
 		
 	roots.extend(rootsRecurse(h,p))
-	roots.extend(rootsRecurse((g/h).modcoeffs(p),p))
+	dividedPoly = NFp(g/h).getPoly()
+	roots.extend(rootsRecurse(dividedPoly,p))
 	return roots
 
 def polynomialGCDModP(u,v,p):
