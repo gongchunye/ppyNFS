@@ -46,7 +46,9 @@ Also, stages that were not in the old code but would be nice to have in ppyNFS a
 
 The completed parts is enough to run a basic NFS factorization. To do this, run:
 		
-		init.py
-		trialdivide.py
-		matrix-gauss.py
-		sqrt-couv.py
+		python init.py
+		python trialdivide.py
+		python matrix-gauss.py
+		python sqrt-couv.py
+		
+Unless otherwise stated, the code is in public domain.
