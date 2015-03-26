@@ -32,9 +32,9 @@ A complete (dirty) implementation of NFS in python is being rewritten to ppyNFS,
 
 [ ] filter
 
-[ ] matrix-gauss
+[X] matrix-gauss
 
-[ ] sqrt-couv
+[X] sqrt-couv
 
 Also, stages that were not in the old code but would be nice to have in ppyNFS are:
 
@@ -43,3 +43,9 @@ Also, stages that were not in the old code but would be nice to have in ppyNFS a
 [ ] sieve-lat
 
 [ ] sqrt-nguy
+
+The completed parts is enough to run a basic NFS factorization. To do this, run:
+		init.py
+		trialdivide.py
+		matrix-gauss.py
+		sqrt-couv.py

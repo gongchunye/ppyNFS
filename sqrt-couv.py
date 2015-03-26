@@ -3,6 +3,8 @@ from etc_math import *
 from files import *
 from sqrt_funcs import *
 from poly_math import *
+import fractions
+from fractions import *
 		
 def getPrimeExponents(value,base):
 	primeExponents = [0]*len(base)
@@ -15,8 +17,8 @@ def getPrimeExponents(value,base):
 	return primeExponents
 	
 def sumExponents(e1,e2):
-	if(len(e1) != len(e2)):
-		raise AssertionError
+#	if(len(e1) != len(e2)):
+#		raise AssertionError
 	for i in range(len(e1)):
 		e1[i] += e2[i]
 
@@ -32,8 +34,8 @@ def getRatPrimeExponents(smooths,base):
 def getNormPrimeExponents(smooths,NF,base):
 	primeExponents = [0]*len(base)
 	for i in range(len(smooths)):
-		smoothRat = NF(Poly(smooths[i])).norm()
-		smoothPrimeExponents = getPrimeExponents(smoothRat,base)
+		smoothNorm = NF(Poly(smooths[i])).norm()
+		smoothPrimeExponents = getPrimeExponents(smoothNorm,base)
 		sumExponents(primeExponents,smoothPrimeExponents)
 		
 	return primeExponents
@@ -48,9 +50,9 @@ def getPrimeExponentsSqrtModN(primeExponents,base,n):
 		
 	return prod
 		
-def generatePrimes(nfsPoly,couvBound):		
+def generatePrimes(primes,nfsPoly,sumBound,couvBound):		
 	sumBound = 0
-	primes = []
+	prodPrimes = 1
 	while(sumBound <= couvBound):
 		prime = generateLargePrime(64)
 		
@@ -63,8 +65,9 @@ def generatePrimes(nfsPoly,couvBound):
 			
 		sumBound += math.log(prime,2)
 		primes.append(prime)
-		
-	return primes
+		prodPrimes *= prime
+		print "%s/%s primes" % (int(sumBound/64)+1,int(couvBound/64)+2)
+	return (primes,prodPrimes,sumBound)
 		
 if __name__ == '__main__':
 	(n,nfsPoly,m,B,M,K) = loadParamsFile()
@@ -74,21 +77,29 @@ if __name__ == '__main__':
 	smooths = loadFileArray("smooths.txt")
 	deps = loadFileArray("deps.txt")
 	
-	for dependency in deps:
+	primes = []
 	
+	for dependency in deps:
 		dependencySmooths = []
+		ctr = 0
 		for column in dependency:
-			smooth = smooths[dependency.index(column)]
-			dependencySmooths.append(smooth)
+			if(column == 1):
+				smooth = smooths[ctr]
+				dependencySmooths.append(smooth)
+			ctr += 1
 			
 		primeExponents = getRatPrimeExponents(dependencySmooths,rfBase)
 		ratSide = getPrimeExponentsSqrtModN(primeExponents,rfBase,n)
 		
 		couvBound = calcRequiredPrimeLength(n,m,Poly(nfsPoly),dependencySmooths)
-		primes = generatePrimes(Poly(nfsPoly),couvBound)
+		sumBound = 0.0
+		(primes,prodPrimes,sumBound) = generatePrimes(primes,Poly(nfsPoly),sumBound,couvBound)
 		primeExponents = getNormPrimeExponents(dependencySmooths,NF,rfBase)
 		
+		r = Fraction()
+		sum = 0
 		for prime in primes:
+			print "%s/%s sqrt" % (primes.index(prime)+1,len(primes))
 			normModP = getPrimeExponentsSqrtModN(primeExponents,rfBase,prime)
 			
 			NFp = NumberFieldModP(Poly(nfsPoly),prime)
@@ -97,8 +108,20 @@ if __name__ == '__main__':
 				prod = prod * NFp(Poly(smooth))
 				
 			sqrt = prod.sqrt()	
+			if(sqrt.norm() != normModP):
+				sqrt = -sqrt
+				
+			x = modinv(prodPrimes/prime,prime)
+			a = sqrt.getPoly().evaluate(m % prime) % prime
+			sum += a*x*prodPrimes/prime
+			r += Fraction((a*x),prime)
 			
-			if(sqrt.norm() == normModP or (-sqrt).norm() == normModP):
-				print "Norms match"
-			else:
-				print "Norms no match"
+		algSide = (sum - int(r)*prodPrimes) % n
+		
+		possibleFactor = fractions.gcd(n,algSide-ratSide)
+		if(possibleFactor > 1):
+			print "%s = %s*p" % (n,possibleFactor)
+			break
+		else:
+			print "Trivial factor found, trying next dependency..."
+		

@@ -281,6 +281,7 @@ def NumberFieldModP(numberFieldPoly,prime):
 			normPoly = self ** ((self.prime**3 - 1)/(self.prime - 1))
 			return normPoly.getCoeffs()[0]
 			
+			
 	_NumberFieldModP.numberFieldPoly = numberFieldPoly
 	_NumberFieldModP.NF = NumberField(numberFieldPoly)
 	_NumberFieldModP.prime = prime
