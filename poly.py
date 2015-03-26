@@ -1,6 +1,6 @@
-from sqrt_funcs import *
 from fractions import *
 from etc_math import *
+import random
 
 def getRootsModPSlow(poly,p):
 	roots = []

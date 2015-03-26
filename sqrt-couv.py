@@ -1,7 +1,7 @@
 from poly import *
 from etc_math import *
 from files import *
-from sqrt_funcs import *
+from prime import *
 import fractions
 from fractions import *
 		
