@@ -219,11 +219,8 @@ def NumberFieldModP(numberFieldPoly,prime):
 	class _NumberFieldModP():
 	
 		def __init__(self, poly):
-			NF = NumberField(numberFieldPoly)
-			poly = NF(poly)
+			poly = self.NF(poly)
 			self.__polyInNF = poly.modcoeffs(prime)
-			self.nonresidue = None
-			(self.s,self.r) = (None,None)
 			
 		def degree(self):
 			return self.__polyInNF.degree()
@@ -260,7 +257,8 @@ def NumberFieldModP(numberFieldPoly,prime):
 			if(self.nonresidue == None):
 				self.nonresidue = findnonresidue(_NumberFieldModP, 3)
 				(self.s,self.r) = getsr(prime, 3)
-				
+			
+		
 			sylowSquare = self ** self.s
 			#print sylowSquare
 			for i in range(2**self.r):
@@ -284,5 +282,8 @@ def NumberFieldModP(numberFieldPoly,prime):
 			return normPoly.getCoeffs()[0]
 			
 	_NumberFieldModP.numberFieldPoly = numberFieldPoly
+	_NumberFieldModP.NF = NumberField(numberFieldPoly)
 	_NumberFieldModP.prime = prime
+	_NumberFieldModP.nonresidue = None
+	(_NumberFieldModP.s,_NumberFieldModP.r) = (None,None)
 	return _NumberFieldModP

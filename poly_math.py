@@ -15,15 +15,26 @@ def getRootsModPFast(poly,p):
 	if(poly.degree() > p):
 		return getRootsModPSlow(poly,p)
 	
-	NFp = NumberFieldModP(poly,p)
+	g = getG(poly,p)
+		
+	roots.extend(rootsRecurse(g,p))
+	return roots
 	
+def getG(poly,p):
+	NFp = NumberFieldModP(poly,p)
+		
 	g = NFp(Poly([0,1])) ** p
 	g = g - NFp(Poly([0,1]))
 	g = g.getPoly()
 	g = polynomialGCDModP(g,poly,p)
-		
-	roots.extend(rootsRecurse(g,p))
-	return roots
+	
+	return g
+	
+def irreducibleModP(poly,p):
+	if(getG(poly,p).degree() == 0):
+		return True
+	else:
+		return False
 
 def rootsRecurse(g,p):
 	if(g.degree() == 2):
