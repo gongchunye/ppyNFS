@@ -49,9 +49,13 @@ def getPrimeExponentsSqrtModN(primeExponents,base,n):
 		
 	return prod
 		
-def generatePrimes(primes,nfsPoly,sumBound,couvBound):		
-	sumBound = 0
+def generatePrimes(primes,nfsPoly,couvBound):		
 	prodPrimes = 1
+	sumBound = 0.0
+	for prime in primes:
+		sumBound += math.log(prime,2)
+		prodPrimes *= prime
+		
 	while(sumBound <= couvBound):
 		prime = generateLargePrime(64)
 		
@@ -65,8 +69,8 @@ def generatePrimes(primes,nfsPoly,sumBound,couvBound):
 		sumBound += math.log(prime,2)
 		primes.append(prime)
 		prodPrimes *= prime
-		print "%s/%s primes" % (int(sumBound/64)+1,int(couvBound/64)+2)
-	return (primes,prodPrimes,sumBound)
+		print "%s/%s primes" % (int(sumBound/64)+1,int(couvBound/64)+1)
+	return (primes,prodPrimes)
 		
 if __name__ == '__main__':
 	(n,nfsPoly,m,B,M,K) = loadParamsFile()
@@ -77,7 +81,6 @@ if __name__ == '__main__':
 	deps = loadFileArray("deps.txt")
 	
 	primes = []
-	
 	for dependency in deps:
 		dependencySmooths = []
 		ctr = 0
@@ -91,8 +94,7 @@ if __name__ == '__main__':
 		ratSide = getPrimeExponentsSqrtModN(primeExponents,rfBase,n)
 		
 		couvBound = calcRequiredPrimeLength(n,m,Poly(nfsPoly),dependencySmooths)
-		sumBound = 0.0
-		(primes,prodPrimes,sumBound) = generatePrimes(primes,Poly(nfsPoly),sumBound,couvBound)
+		(primes,prodPrimes) = generatePrimes(primes,Poly(nfsPoly),couvBound)
 		primeExponents = getNormPrimeExponents(dependencySmooths,NF,rfBase)
 		
 		r = Fraction()
@@ -118,7 +120,7 @@ if __name__ == '__main__':
 		algSide = (sum - int(r)*prodPrimes) % n
 		
 		possibleFactor = fractions.gcd(n,algSide-ratSide)
-		if(possibleFactor > 1):
+		if(possibleFactor > 1 and possibleFactor != n):
 			print "%s = %s*p" % (n,possibleFactor)
 			break
 		else:

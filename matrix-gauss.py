@@ -121,6 +121,7 @@ if __name__ == '__main__':
 	qcBase = loadFileArray("qcbase.txt")
 	
 	smooths = loadFileArray("smooths.txt")
+	print "Building matrix..."
 	matrix = []
 	for smoothPair in smooths:
 		smoothPoly = Poly(smoothPair)
@@ -131,12 +132,14 @@ if __name__ == '__main__':
 		matrix.append(matrixRow)
 	
 	#print matrix
+	print "Transposing matrix..."
 	matrix = tranposeMatrix(matrix)
-	#print matrix
+	print "Doing gaussian reduction..."
 	gaussMatrix(matrix)
 	
 	deps = open("deps.txt", "w")
 	
+	print "Writing dependencies..."
 	for i in range(1,16):
 		dep = findDependency(matrix,i)
 		deps.write(str(dep)+"\n")
