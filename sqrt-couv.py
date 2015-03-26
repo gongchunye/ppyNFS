@@ -39,7 +39,7 @@ def getNormPrimeExponents(smooths,NF,base):
 		
 	return primeExponents
 	
-def getPrimeExponentsSqrtModN(primeExponents,base,n):
+def getSqrtModNFromPrimeExponents(primeExponents,base,n):
 	prod = 1
 	for i in range(len(primeExponents)):
 		if(primeExponents[i] % 2 != 0):
@@ -91,7 +91,7 @@ if __name__ == '__main__':
 			ctr += 1
 			
 		primeExponents = getRatPrimeExponents(dependencySmooths,rfBase)
-		ratSide = getPrimeExponentsSqrtModN(primeExponents,rfBase,n)
+		ratSide = getSqrtModNFromPrimeExponents(primeExponents,rfBase,n)
 		
 		couvBound = calcRequiredPrimeLength(n,m,Poly(nfsPoly),dependencySmooths)
 		(primes,prodPrimes) = generatePrimes(primes,Poly(nfsPoly),couvBound)
@@ -100,7 +100,7 @@ if __name__ == '__main__':
 		sum = 0
 		for prime in primes:
 			print "%s/%s sqrt" % (primes.index(prime)+1,len(primes))
-			normModP = getPrimeExponentsSqrtModN(primeExponents,rfBase,prime)
+			normModP = getSqrtModNFromPrimeExponents(primeExponents,rfBase,prime)
 			
 			NFp = NumberFieldModP(Poly(nfsPoly),prime)
 			prod = NFp(Poly([1]))
@@ -110,15 +110,20 @@ if __name__ == '__main__':
 			sqrt = prod.sqrt()	
 			if(sqrt.norm() != normModP):
 				sqrt = -sqrt
+			if(sqrt.norm() != normModP):				
+				raise AssertionError
 				
 			x = modinv(prodPrimes/prime,prime)
 			a = sqrt.getPoly().evaluate(m % prime) % prime
-			sum += a*x*prodPrimes/prime % prodPrimes
+			sum = (sum + a*x*prodPrimes/prime) % prodPrimes
 			
 		if(math.log(sum,10) > (math.log(prodPrimes,10))/2):
 			sum = -(-sum % prodPrimes)		
 			
 		algSide = sum % n
+		
+		if(algSide**2 % n != ratSide**2 % n):
+			print "Warning: not congruent."
 		
 		possibleFactor = fractions.gcd(n,abs(algSide-ratSide))
 		print "%s = %s*p" % (n,possibleFactor)

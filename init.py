@@ -5,7 +5,7 @@ from poly_math import *
 from prime import *
 
 if __name__ == '__main__':
-	semiprimeSize = 50
+	semiprimeSize = 64
 	n = generateLargePrime(semiprimeSize/2)*generateLargePrime(semiprimeSize/2)
 	print "n = %s" % (n)
 	
@@ -53,7 +53,5 @@ if __name__ == '__main__':
 	paramsFile.write("m = " +str(m)+"\n")
 	paramsFile.write("K = " +str(K)+"\n")
 	paramsFile.close()
-	
-	print "Run sieve-line.py or trialdivide.py."
 	
 				
