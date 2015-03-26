@@ -97,7 +97,6 @@ if __name__ == '__main__':
 		(primes,prodPrimes) = generatePrimes(primes,Poly(nfsPoly),couvBound)
 		primeExponents = getNormPrimeExponents(dependencySmooths,NF,rfBase)
 		
-		r = Fraction()
 		sum = 0
 		for prime in primes:
 			print "%s/%s sqrt" % (primes.index(prime)+1,len(primes))
@@ -114,14 +113,16 @@ if __name__ == '__main__':
 				
 			x = modinv(prodPrimes/prime,prime)
 			a = sqrt.getPoly().evaluate(m % prime) % prime
-			sum += a*x*prodPrimes/prime
-			r += Fraction((a*x),prime)
+			sum += a*x*prodPrimes/prime % prodPrimes
 			
-		algSide = (sum - int(r)*prodPrimes) % n
+		if(math.log(sum,10) > (math.log(prodPrimes,10))/2):
+			sum = -(-sum % prodPrimes)		
+			
+		algSide = sum % n
 		
-		possibleFactor = fractions.gcd(n,algSide-ratSide)
-		if(possibleFactor > 1 and possibleFactor != n):
-			print "%s = %s*p" % (n,possibleFactor)
+		possibleFactor = fractions.gcd(n,abs(algSide-ratSide))
+		print "%s = %s*p" % (n,possibleFactor)
+		if(possibleFactor != 1 and possibleFactor != n):
 			break
 		else:
 			print "Trivial factor found, trying next dependency..."
