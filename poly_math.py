@@ -38,8 +38,8 @@ def rootsRecurse(g,p):
 	NFp = NumberFieldModP(g,p)
 	
 	while(h.degree() == 0 or g == h):
-		a = [random.randint(0,p)
-		base = NFp(Poly(a,1]))
+		a = random.randint(0,p)
+		base = NFp(Poly([a,1]))
 		base = base ** ((p-1)/2)
 		toGCD = base - NFp(Poly([1])) 
 		h = polynomialGCDModP(toGCD.getPoly(),g,p)
