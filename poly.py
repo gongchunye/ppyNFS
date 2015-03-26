@@ -324,7 +324,7 @@ def NumberFieldModP(numberFieldPoly,prime):
 				self.nonresidue = findnonresidue(_NumberFieldModP, 3)
 				(self.s,self.r) = getsr(prime, 3)
 			
-		
+			'''
 			sylowSquare = self ** self.s
 			#print sylowSquare
 			for i in range(2**self.r):
@@ -334,8 +334,20 @@ def NumberFieldModP(numberFieldPoly,prime):
 					inverse = modinv(sylowSqrt.getCoeffs()[0],self.prime)
 					inverse = _NumberFieldModP(Poly([inverse]))
 					return inverse*(self ** ((self.s+1)/2))
-					
-			return None
+			'''
+
+			lamb = self ** self.s
+			zeta = self.nonresidue**self.s
+			w = self ** ((self.s+1)/2)
+		
+			while(lamb.getPoly().coeffs[0] != 1):
+				m = 1
+				while((lamb ** (2**m)).getPoly().coeffs[0] != 1):
+					m += 1
+				w = w*(zeta**(2**(self.r-m-1)))
+				lamb = lamb*(zeta**(2**(self.r-m)))
+				
+			return w
 		
 		def getCoeffs(self):
 			return self.__polyInNF.getCoeffs()

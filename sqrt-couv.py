@@ -42,8 +42,8 @@ def getNormPrimeExponents(smooths,NF,base):
 def getSqrtModNFromPrimeExponents(primeExponents,base,n):
 	prod = 1
 	for i in range(len(primeExponents)):
-		if(primeExponents[i] % 2 != 0):
-			raise AssertionError
+#		if(primeExponents[i] % 2 != 0):
+#			raise AssertionError
 		primePower = base[i]**(primeExponents[i]/2) % n
 		prod = (prod * primePower) % n
 		
@@ -113,9 +113,10 @@ if __name__ == '__main__':
 			if(sqrt.norm() != normModP):				
 				raise AssertionError
 				
-			x = modinv(prodPrimes/prime,prime)
+			q = prodPrimes/prime
+			x = modinv(q,prime)
 			a = sqrt.getPoly().evaluate(m % prime) % prime
-			sum = (sum + a*x*prodPrimes/prime) % prodPrimes
+			sum = (sum + a*x*q) % prodPrimes
 			
 		if(math.log(sum,10) > (math.log(prodPrimes,10))/2):
 			sum = -(-sum % prodPrimes)		
