@@ -5,6 +5,10 @@ from files import *
 def getMatrixRowRat(smoothPoly,m,rfBase):
 	value = smoothPoly.evaluate(m)
 	matrixRow = []
+	if(value < 0):
+		matrixRow.append(1)
+	else:
+		append(0)
 	for prime in rfBase:
 		ctr = 0
 		while(value % prime == 0):
@@ -128,7 +132,7 @@ if __name__ == '__main__':
 		matrixRow = getMatrixRowRat(smoothPoly,m,rfBase)
 		matrixRow.extend(getMatrixRowAlg(smoothPoly,NF,afBase))
 		matrixRow.extend(getMatrixRowQC(smoothPoly,qcBase))
-		matrixRow.extend([0]*(K-len(rfBase)-len(afBase)-len(qcBase)))
+		matrixRow.extend([0]*(K-len(rfBase)-len(afBase)-len(qcBase)-1))
 		matrix.append(matrixRow)
 	
 	#print matrix
