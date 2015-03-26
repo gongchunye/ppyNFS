@@ -58,12 +58,7 @@ def generatePrimes(primes,nfsPoly,couvBound):
 		
 	while(sumBound <= couvBound):
 		prime = generateLargePrime(64)
-		
 		if(not(irreducibleModP(nfsPoly,prime))):
-			continue
-			
-		(s,r) = getsr(prime,3)
-		if(r > 5):
 			continue
 			
 		sumBound += math.log(prime,2)
@@ -75,6 +70,7 @@ def generatePrimes(primes,nfsPoly,couvBound):
 if __name__ == '__main__':
 	(n,nfsPoly,m,B,M,K) = loadParamsFile()
 	NF = NumberField(Poly(nfsPoly))
+	nfsPolyDerivative = Poly(nfsPoly).derivative()
 	
 	rfBase = loadFileArray("rfbase.txt")
 	smooths = loadFileArray("smooths.txt")
@@ -92,6 +88,7 @@ if __name__ == '__main__':
 			
 		primeExponents = getRatPrimeExponents(dependencySmooths,rfBase)
 		ratSide = getSqrtModNFromPrimeExponents(primeExponents,rfBase,n)
+		ratSide = (ratSide * nfsPolyDerivative.evaluate(m)) % n
 		
 		couvBound = calcRequiredPrimeLength(n,m,Poly(nfsPoly),dependencySmooths)
 		(primes,prodPrimes) = generatePrimes(primes,Poly(nfsPoly),couvBound)
@@ -100,12 +97,16 @@ if __name__ == '__main__':
 		sum = 0
 		for prime in primes:
 			print "%s/%s sqrt" % (primes.index(prime)+1,len(primes))
-			normModP = getSqrtModNFromPrimeExponents(primeExponents,rfBase,prime)
+			NFp = NumberFieldModP(Poly(nfsPoly),prime) 
 			
-			NFp = NumberFieldModP(Poly(nfsPoly),prime)
+			normModP = getSqrtModNFromPrimeExponents(primeExponents,rfBase,prime)
+			normModP = (normModP*NFp(nfsPolyDerivative).norm()) % prime
+			
 			prod = NFp(Poly([1]))
 			for smooth in dependencySmooths:
 				prod = prod * NFp(Poly(smooth))
+				
+			prod = prod * (NFp(nfsPolyDerivative)**2)
 				
 			sqrt = prod.sqrt()	
 			if(sqrt.norm() != normModP):
