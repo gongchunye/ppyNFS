@@ -8,7 +8,7 @@ def getMatrixRowRat(smoothPoly,m,rfBase):
 	if(value < 0):
 		matrixRow.append(1)
 	else:
-		append(0)
+		matrixRow.append(0)
 	for prime in rfBase:
 		ctr = 0
 		while(value % prime == 0):
