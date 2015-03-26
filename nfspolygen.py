@@ -40,4 +40,15 @@ def reducible(poly):
 			return True
 	return False
 
-	
+def expansionBaseM(n,m):
+    q = n
+    k = 0
+    a = []
+    i = len(str(n))
+
+    while q != 0:
+        a.append(q % m)
+        q = q / m
+        k += 1
+
+    return a

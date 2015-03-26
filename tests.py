@@ -1,9 +1,25 @@
 from poly import *
 from nfspolygen import *
-from poly_math import *
 import unittest
 import math
 
+def multAllElements(one,array):
+	prod = one
+	for entry in array:
+		prod = prod * entry
+		
+	return prod
+	
+
+def randomPrimes(totalsize,size):
+	primes = [] 
+	sum = 0
+	while(sum <= totalsize):
+		p = generateLargePrime(size)
+		primes.append(p)
+		sum += math.log(p,2)
+		
+	return primes
 
 class TestSequenceFunctions(unittest.TestCase):
 	

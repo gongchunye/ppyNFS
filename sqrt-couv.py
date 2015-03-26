@@ -2,7 +2,6 @@ from poly import *
 from etc_math import *
 from files import *
 from sqrt_funcs import *
-from poly_math import *
 import fractions
 from fractions import *
 		

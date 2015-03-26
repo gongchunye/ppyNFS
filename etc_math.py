@@ -183,3 +183,40 @@ def jacobi(n, m):
 def calculateB(n):	
 	top=math.pow(8.0/9.0,1.0/3.0)*math.pow(math.log(n),1.0/3.0)*math.pow(math.log(math.log(n)),2.0/3.0)
 	return int(math.exp(top))
+	
+	
+def calcRequiredPrimeLength(n, m, nfspoly, tomult):
+	logest = math.log(nfspoly.degree(),2)*(nfspoly.degree()+5)*.5;
+	logest += math.log(n,2)
+	maxu = tomult[0][0]
+	for smooth in tomult:
+		if(maxu < abs(smooth[0])):
+			maxu = abs(smooth[0])
+		if(maxu < abs(smooth[1])):
+			maxu = abs(smooth[1])
+	b = 2*maxu*math.sqrt(nfspoly.degree())*m
+	logest+= len(tomult)*.5*math.log(b,2)
+	return logest
+	
+def egcd(a, b):
+    if a == 0:
+        return (b, 0, 1)
+    else:
+        g, y, x = egcd(b % a, a)
+        return (g, x - (b // a) * y, y)
+
+def modinv(a, m):
+    g, x, y = egcd(a, m)
+    if g != 1:
+        raise Exception('modular inverse does not exist')
+    else:
+        return x % m
+		
+def getsr(p,e):
+	q = p**e - 1
+	counter = 0
+	while (q%2 == 0):
+		counter += 1
+		q /= 2
+	return (q,counter)
+	
