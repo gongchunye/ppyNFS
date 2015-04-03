@@ -44,7 +44,8 @@ def getSqrtModNFromPrimeExponents(primeExponents,base,n):
 	for i in range(len(primeExponents)):
 #		if(primeExponents[i] % 2 != 0):
 #			raise AssertionError
-		primePower = base[i]**(primeExponents[i]/2) % n
+		#primePower = base[i]**(primeExponents[i]/2) % n
+		primePower = pow(base[i],primeExponents[i]/2,n)
 		prod = (prod * primePower) % n
 		
 	return prod
