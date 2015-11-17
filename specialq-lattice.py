@@ -9,19 +9,21 @@ def main():
 	if(nfspoly.evaluate(r)%q==0):
 		print "r is a root of f() mod q"
 	
-	basis = []
+	
+	basis_a = []
 	b = 1
 	for i in range(2):
 		a = -b*r + i*q
-		basis.append([a,b])
+		basis_a.append(a)
+	basis = [basis_a,[1,1]]
 
 	print "basis: %s" % basis
 	mat_basis = liblll.create_matrix(basis) 
 	mat_reduced = liblll.lll_reduction(mat_basis)
 	#mat_reduced = mat_basis # uncomment to not reduce lattice basis
 	a0 = mat_reduced[0][0].numerator # lll library creates fractions with denominator 1, so grab numerator
-	b0 = mat_reduced[0][1].numerator
-	a1 = mat_reduced[1][0].numerator
+	a1 = mat_reduced[0][1].numerator
+	b0 = mat_reduced[1][0].numerator
 	b1 = mat_reduced[1][1].numerator
 	print "reduced basis: %s" % [[a0,b0],[a1,b1]]
 	
