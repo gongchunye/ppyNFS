@@ -20,7 +20,7 @@ def main():
 	nfspoly = poly.Poly([8,29,15,1])
 	NF = poly.NumberField(nfspoly)
 	while(True):
-		q = primemath.generateLargePrime(9)
+		q = primemath.generateLargePrime(20)
 		r = poly.getRootsModPFast(nfspoly,q)
 		if(len(r) > 0):
 			break
