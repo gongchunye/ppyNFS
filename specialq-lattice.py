@@ -4,8 +4,12 @@ import liblll
 def main():
 	nfspoly = poly.Poly([8,29,15,1])
 	NF = poly.NumberField(nfspoly)
-	q = 359
-	r = 110
+	while(True):
+		q = primemath.generateLargePrime(10)
+		r = poly.getRootsModPFast(nfspoly,q)
+		if(len(r) > 0):
+			break
+	r = r[0]
 	if(nfspoly.evaluate(r)%q==0):
 		print "r is a root of f() mod q"
 	
