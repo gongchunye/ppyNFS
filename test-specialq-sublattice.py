@@ -16,28 +16,7 @@ def reduce_basis(p1,p2):
 def chinese_rem(a,b,p,q):
 	return (a*q*etcmath.modInv(q,p) + b*p*etcmath.modInv(p,q)) % (p*q)
 	
-def main():
-	nfspoly = poly.Poly([8,29,15,1])
-	NF = poly.NumberField(nfspoly)
-	while(True):
-		q = primemath.generateLargePrime(20)
-		r = poly.getRootsModPFast(nfspoly,q)
-		if(len(r) > 0):
-			break
-	r = r[0]
-
-	print "special_q: f(%s) = 0 mod %s" %(r,q)
-		
-	while(True):
-		subp = primemath.generateLargePrime(7)
-		subr = poly.getRootsModPFast(nfspoly,subp)
-		if(len(subr) > 0):
-			break
-	subr = subr[0]
-
-	print "sublattice: f(%s) = 0 mod %s" %(subr,subp)
-	
-	
+def find_sublattice_basis(q,r,subp,subr):
 	basis1 = []
 	b=0
 	while(True):
@@ -58,7 +37,30 @@ def main():
 		basis2 = [a,b]
 		break
 
-	basis = [basis1,basis2]
+	return [basis1,basis2]
+	
+def main():
+	nfspoly = poly.Poly([8,29,15,1])
+	NF = poly.NumberField(nfspoly)
+	while(True):
+		q = primemath.generateLargePrime(20)
+		r = poly.getRootsModPFast(nfspoly,q)
+		if(len(r) > 0):
+			break
+	r = r[0]
+
+	print "special_q: f(%s) = 0 mod %s" %(r,q)
+		
+	while(True):
+		subp = primemath.generateLargePrime(7)
+		subr = poly.getRootsModPFast(nfspoly,subp)
+		if(len(subr) > 0):
+			break
+	subr = subr[0]
+
+	print "subp: f(%s) = 0 mod %s" %(subr,subp)
+		
+	basis = find_sublattice_basis(q,r,subp,subr)
 	print "basis: %s" % basis
 	basis_r = reduce_basis(basis[0],basis[1])
 	a0 = basis_r[0][0]
