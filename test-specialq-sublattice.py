@@ -17,7 +17,6 @@ def chinese_rem(a,b,p,q):
 	return (a*q*etcmath.modInv(q,p) + b*p*etcmath.modInv(p,q)) % (p*q)
 	
 def find_sublattice_basis(q,r,subp,subr):
-	basis1 = []
 	b=0
 	while(True):
 		b += 1
