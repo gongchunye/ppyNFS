@@ -16,11 +16,11 @@ def reduce_basis(p1,p2):
 def chinese_rem(a,b,p,q):
 	return (a*q*etcmath.modInv(q,p) + b*p*etcmath.modInv(p,q)) % (p*q)
 	
-def find_sublattice_basis(q,r,subp,subr):
+def find_sublattice_basis(q,s,p,r):
 	b=0
 	while(True):
 		b += 1
-		a = chinese_rem(-b*r,-b*subr,q,subp)
+		a = chinese_rem(-b*s,-b*r,q,p)
 		if(a == 0 or b == 0):
 			continue			
 		basis1 = [a,b]
@@ -28,7 +28,7 @@ def find_sublattice_basis(q,r,subp,subr):
 		
 	while(True):
 		b += 1
-		a = chinese_rem(-b*r,-b*subr,q,subp)
+		a = chinese_rem(-b*s,-b*r,q,p)
 		if(a == 0 or b == 0):
 			continue		
 		if(float(basis1[0])/a - float(basis1[1])/b < 0.01):
@@ -43,23 +43,23 @@ def main():
 	NF = poly.NumberField(nfspoly)
 	while(True):
 		q = primemath.generateLargePrime(20)
-		r = poly.getRootsModPFast(nfspoly,q)
+		s = poly.getRootsModPFast(nfspoly,q)
+		if(len(s) > 0):
+			break
+	s = s[0]
+
+	print "special_q: f(%s) = 0 mod %s" %(s,q)
+		
+	while(True):
+		p = primemath.generateLargePrime(7)
+		r = poly.getRootsModPFast(nfspoly,p)
 		if(len(r) > 0):
 			break
 	r = r[0]
 
-	print "special_q: f(%s) = 0 mod %s" %(r,q)
+	print "p: f(%s) = 0 mod %s" %(r,p)
 		
-	while(True):
-		subp = primemath.generateLargePrime(7)
-		subr = poly.getRootsModPFast(nfspoly,subp)
-		if(len(subr) > 0):
-			break
-	subr = subr[0]
-
-	print "subp: f(%s) = 0 mod %s" %(subr,subp)
-		
-	basis = find_sublattice_basis(q,r,subp,subr)
+	basis = find_sublattice_basis(q,s,p,r)
 	print "basis: %s" % basis
 	basis_r = reduce_basis(basis[0],basis[1])
 	a0 = basis_r[0][0]
@@ -76,10 +76,10 @@ def main():
 			if(a == 0 or b == 0):
 				continue
 			NFelement = NF(poly.Poly([a,b]))
-			if(NFelement.norm()%q == 0 and NFelement.norm()%subp == 0):
-				print "%s is q-divisible and subp-divisible" % [a,b]
+			if(NFelement.norm()%q == 0 and NFelement.norm()%p == 0):
+				print "%s is q-divisible and p-divisible" % [a,b]
 			else:
-				raise AssertionError("%s is not q-divisible or subp-divisible" % [a,b])
+				raise AssertionError("%s is not q-divisible or p-divisible" % [a,b])
 
 if __name__ == '__main__':
 	main()
