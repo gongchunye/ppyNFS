@@ -1,9 +1,10 @@
-from poly import *
-from etc_math import *
-from files import *
-from prime import *
+import poly
+import etcmath
+import files
+import primemath
 import fractions
-from fractions import *
+import math
+import fractions
 		
 def getPrimeExponents(value,base):
 	primeExponents = [0]*len(base)
@@ -24,7 +25,7 @@ def sumExponents(e1,e2):
 def getRatPrimeExponents(smooths,base):
 	primeExponents = [0]*len(base)
 	for i in range(len(smooths)):
-		smoothRat = Poly(smooths[i]).evaluate(m)
+		smoothRat = poly.Poly(smooths[i]).evaluate(m)
 		smoothPrimeExponents = getPrimeExponents(smoothRat,base)
 		sumExponents(primeExponents,smoothPrimeExponents)
 		
@@ -33,7 +34,7 @@ def getRatPrimeExponents(smooths,base):
 def getNormPrimeExponents(smooths,NF,base):
 	primeExponents = [0]*len(base)
 	for i in range(len(smooths)):
-		smoothNorm = NF(Poly(smooths[i])).norm()
+		smoothNorm = NF(poly.Poly(smooths[i])).norm()
 		smoothPrimeExponents = getPrimeExponents(smoothNorm,base)
 		sumExponents(primeExponents,smoothPrimeExponents)
 		
@@ -58,8 +59,8 @@ def generatePrimes(primes,nfsPoly,couvBound):
 		prodPrimes *= prime
 		
 	while(sumBound <= couvBound):
-		prime = generateLargePrime(64)
-		if(not(irreducibleModP(nfsPoly,prime))):
+		prime = primemath.generateLargePrime(64)
+		if(not(poly.irreducibleModP(nfsPoly,prime))):
 			continue
 			
 		sumBound += math.log(prime,2)
@@ -69,13 +70,13 @@ def generatePrimes(primes,nfsPoly,couvBound):
 	return (primes,prodPrimes)
 		
 if __name__ == '__main__':
-	(n,nfsPoly,m,B,M,K) = loadParamsFile()
-	NF = NumberField(Poly(nfsPoly))
-	nfsPolyDerivative = Poly(nfsPoly).derivative()
+	(n,nfsPoly,m,B,M,K) = files.loadParamsFile()
+	NF = poly.NumberField(poly.Poly(nfsPoly))
+	nfsPolyDerivative = poly.Poly(nfsPoly).derivative()
 	
-	rfBase = loadFileArray("rfbase.txt")
-	smooths = loadFileArray("smooths.txt")
-	deps = loadFileArray("deps.txt")
+	rfBase = files.loadFileArray("rfbase.txt")
+	smooths = files.loadFileArray("smooths.txt")
+	deps = files.loadFileArray("deps.txt")
 	
 	primes = []
 	for dependency in deps:
@@ -91,21 +92,21 @@ if __name__ == '__main__':
 		ratSide = getSqrtModNFromPrimeExponents(primeExponents,rfBase,n)
 		ratSide = (ratSide * nfsPolyDerivative.evaluate(m)) % n
 		
-		couvBound = calcRequiredPrimeLength(n,m,Poly(nfsPoly),dependencySmooths)
-		(primes,prodPrimes) = generatePrimes(primes,Poly(nfsPoly),couvBound)
+		couvBound = etcmath.calcRequiredPrimeLength(n,m,poly.Poly(nfsPoly),dependencySmooths)
+		(primes,prodPrimes) = generatePrimes(primes,poly.Poly(nfsPoly),couvBound)
 		primeExponents = getNormPrimeExponents(dependencySmooths,NF,rfBase)
 		
 		sum = 0
 		for prime in primes:
 			print "%s/%s sqrt" % (primes.index(prime)+1,len(primes))
-			NFp = NumberFieldModP(Poly(nfsPoly),prime) 
+			NFp = poly.NumberFieldModP(poly.Poly(nfsPoly),prime) 
 			
 			normModP = getSqrtModNFromPrimeExponents(primeExponents,rfBase,prime)
 			normModP = (normModP*NFp(nfsPolyDerivative).norm()) % prime
 			
-			prod = NFp(Poly([1]))
+			prod = NFp(poly.Poly([1]))
 			for smooth in dependencySmooths:
-				prod = prod * NFp(Poly(smooth))
+				prod = prod * NFp(poly.Poly(smooth))
 				
 			prod = prod * (NFp(nfsPolyDerivative)**2)
 				
@@ -116,11 +117,11 @@ if __name__ == '__main__':
 				raise AssertionError
 				
 			q = prodPrimes/prime
-			x = modinv(q,prime)
+			x = etcmath.modinv(q,prime)
 			a = sqrt.getPoly().evaluate(m % prime) % prime
 			sum = (sum + a*x*q) % prodPrimes
 			
-		if(math.log(sum,10) > (math.log(prodPrimes,10))/2):
+		if(math.log(sum) > (math.log(prodPrimes))/2):
 			sum = -(-sum % prodPrimes)		
 			
 		algSide = sum % n

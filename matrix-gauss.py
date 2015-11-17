@@ -1,64 +1,6 @@
-from poly import *
-from etc_math import *
-from files import *
-
-def getMatrixRowRat(smoothPoly,m,rfBase):
-	value = smoothPoly.evaluate(m)
-	matrixRow = []
-	if(value < 0):
-		matrixRow.append(1)
-	else:
-		matrixRow.append(0)
-	for prime in rfBase:
-		ctr = 0
-		while(value % prime == 0):
-			value /= prime
-			ctr = (ctr+1) % 2
-		matrixRow.append(ctr)
-		
-	return matrixRow
-	
-def getMatrixRowAlg(smoothPoly,NF,afBase):
-	smoothNorm = NF(smoothPoly).norm()
-	matrixRow = []
-	for prime in afBase:
-		ctr = 0
-		r = prime[0]
-		p = prime[1]
-		a = smoothPair[0]
-		b = smoothPair[1]
-		if(a%p == (-b*r) % p):
-			while(smoothNorm % p == 0):
-				ctr = (ctr+1) % 2
-				smoothNorm /= p	
-		matrixRow.append(ctr)
-		
-	return matrixRow
-	
-def getMatrixRowQC(smoothPoly,qcBase):
-	matrixRow = []
-	for qcPair in qcBase:
-		r = qcPair[0]
-		p = qcPair[1]
-		c = legendre_symbol(smoothPoly.evaluate(r),p)
-		if(c == 1):
-			matrixRow.append(0)
-		elif(c == -1):
-			matrixRow.append(1)
-			
-	return matrixRow
-			
-def tranposeMatrix(matrix):
-	return [list(i) for i in zip(*matrix)]
-	
-def swapRow(matrix,i,j):
-	temp = matrix[i]
-	matrix[i] = matrix[j]
-	matrix[j] = temp
-	
-def addRow(matrix,i,j):
-	for k in range(len(matrix[i])):
-		matrix[i][k] = (matrix[i][k] + matrix[j][k]) % 2
+import poly
+import files
+import matrixmath
 	
 def gaussMatrix(matrix):
 	# TODO: implement proper pivot algorithm.
@@ -74,7 +16,7 @@ def gaussMatrix(matrix):
 							continue
 						if(matrix[r2][c] == 1):
 							found = True
-							addRow(matrix,r2,r)
+							matrixmath.addRow(matrix,r2,r)
 					break
 			
 		
@@ -88,7 +30,7 @@ def gaussMatrix(matrix):
 						break
 					else:
 						found = True
-						swapRow(matrix,r,c)
+						matrixmath.swapRow(matrix,r,c)
 						
 def zeroRow(row):
 	for i in range(len(row)):
@@ -110,37 +52,34 @@ def findDependency(matrix,n):
 				dep[r] = (dep[c] + dep[r]) % 2
 	
 	return dep
-	
-def printMatrix(matrix):
-	for row in matrix:
-		print row
+
 		
 if __name__ == '__main__':
-	(n,nfsPoly,m,B,M,K) = loadParamsFile()
-	NF = NumberField(Poly(nfsPoly))
+	(n,nfsPoly,m,B,M,K) = files.loadParamsFile()
+	NF = poly.NumberField(poly.Poly(nfsPoly))
 	
 	
-	rfBase = loadFileArray("rfbase.txt")
-	afBase = loadFileArray("afbase.txt")
-	qcBase = loadFileArray("qcbase.txt")
+	rfBase = files.loadFileArray("rfbase.txt")
+	afBase = files.loadFileArray("afbase.txt")
+	qcBase = files.loadFileArray("qcbase.txt")
 	
-	smooths = loadFileArray("smooths.txt")
+	smooths = files.loadFileArray("smooths.txt")
 	print "Building matrix..."
 	matrix = []
 	for smoothPair in smooths:
-		smoothPoly = Poly(smoothPair)
-		matrixRow = getMatrixRowRat(smoothPoly,m,rfBase)
-		matrixRow.extend(getMatrixRowAlg(smoothPoly,NF,afBase))
-		matrixRow.extend(getMatrixRowQC(smoothPoly,qcBase))
-		matrixRow.extend([0]*(K-len(rfBase)-len(afBase)-len(qcBase)-1))
+		smoothPoly = poly.Poly(smoothPair)
+		matrixRow = matrixmath.getMatrixRowRat(smoothPoly,m,rfBase)
+		matrixRow.extend(matrixmath.getMatrixRowAlg(smoothPoly,NF,afBase))
+		matrixRow.extend(matrixmath.getMatrixRowQC(smoothPoly,qcBase))
+		matrixRow.extend([0]*(K-len(rfBase)-len(afBase)-len(qcBase)-1)) # one extra for sign
 		matrix.append(matrixRow)
 	
-	#print matrix
+	#matrixmath.printMatrix(matrix)
 	print "Transposing matrix..."
-	matrix = tranposeMatrix(matrix)
+	matrix = matrixmath.tranposeMatrix(matrix)
 	print "Doing gaussian reduction..."
 	gaussMatrix(matrix)
-	
+	#matrixmath.printMatrix(matrix)
 	deps = open("deps.txt", "w")
 	
 	print "Writing dependencies..."

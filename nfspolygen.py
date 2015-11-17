@@ -1,5 +1,5 @@
-from prime import *
-from poly import *
+import primemath
+import poly
 import math
 
 
@@ -24,7 +24,7 @@ def shrinkNfsPoly(poly,m):
 			
 def generateNFSPoly(n,d):
 	m = int(math.pow(n,1.0/d))
-	nfsPoly = Poly(expansionBaseM(n,m))
+	nfsPoly = poly.Poly(expansionBaseM(n,m))
 	shrinkNfsPoly(nfsPoly,m)
 	while(reducible(nfsPoly)):
 		m -= 1

@@ -1,5 +1,5 @@
-from fractions import *
-from etc_math import *
+import fractions
+import etcmath
 import random
 
 def getRootsModPSlow(poly,p):
@@ -38,9 +38,9 @@ def irreducibleModP(poly,p):
 
 def rootsRecurse(g,p):
 	if(g.degree() == 2):
-		return qe_mod(g.coeffs[2],g.coeffs[1],g.coeffs[0],p)
+		return etcmath.qe_mod(g.coeffs[2],g.coeffs[1],g.coeffs[0],p)
 	elif(g.degree() == 1):
-		return [(-g.coeffs[0]*modInv(g.coeffs[1],p)) % p]
+		return [(-g.coeffs[0]*etcmath.modInv(g.coeffs[1],p)) % p]
 	elif(g.degree() == 0):
 		return []
 	
@@ -128,8 +128,8 @@ class Poly():
 	def modcoeffs(self,p):
 		coeffs = [0]*len(self.coeffs)
 		for i in range(len(self.coeffs)):
-			if(type(self.coeffs[i]) == Fraction):
-				coeffs[i] = modInv(self.coeffs[i].denominator,p)*self.coeffs[i].numerator % p
+			if(type(self.coeffs[i]) == fractions.Fraction):
+				coeffs[i] = etcmath.modInv(self.coeffs[i].denominator,p)*self.coeffs[i].numerator % p
 			else:
 				coeffs[i] = self.coeffs[i] % p
 		return Poly(coeffs)
@@ -198,7 +198,7 @@ class Poly():
 			
 	
 			if(num[-1] % divisor != 0):
-				mult = Fraction(num[-1],divisor)
+				mult = fractions.Fraction(num[-1],divisor)
 			else:
 				mult = num[-1]/divisor
 				
@@ -322,7 +322,7 @@ def NumberFieldModP(numberFieldPoly,prime):
 		def sqrt(self):
 			if(self.nonresidue == None):
 				self.nonresidue = findnonresidue(_NumberFieldModP, 3)
-				(self.s,self.r) = getsr(prime, 3)
+				(self.s,self.r) = etcmath.getsr(prime, 3)
 			
 			'''
 			sylowSquare = self ** self.s

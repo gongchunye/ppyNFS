@@ -65,7 +65,7 @@ def generateLargePrime(k):
      print "Failure after "+`r_` + " tries."
      raise AssertionError
 	 
-def primes(n): # sieve of eratosthenes
+def generatePrimes(n): # sieve of eratosthenes
     ps, sieve = [], [True] * (n + 1)
     for p in range(2, n + 1):
         if sieve[p]:

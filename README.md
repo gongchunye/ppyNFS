@@ -51,4 +51,4 @@ The completed parts is enough to run a basic NFS factorization. To do this, run:
 		python matrix-gauss.py
 		python sqrt-couv.py
 		
-Unless otherwise stated, the code is in public domain.
+LLL code is from https://github.com/kutio/liblll. Unless otherwise stated, the code is in public domain.
