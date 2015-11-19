@@ -100,8 +100,8 @@ def sieve_special_q(q,s,I,J,rfBase,afBase,(n,nfsPoly,m,B,M,K)):
 	basis_q = reduce_basis(basis_q[0],basis_q[1])
 	(qa0,qb0,qa1,qb1) = frankefy(basis_q)
 	logB = math.log(B)	
-	lambd_a = 1.0
-	lambd_r = 1.0
+	lambd_a = .7
+	lambd_r = .7
 		
 	sieve = [[0.0] * (J) for i in range(I)]
 	print "sieving rational side..."
@@ -220,8 +220,8 @@ def main():
 			specialqFile.write(str([s,q])+"\n")
 			print "special_q: %s" % [q,s]
 			
-			I = 512
-			J = 512
+			I = 1024
+			J = 1024
 			smooths = sieve_special_q(q,s,I,J,rfBase,afBase,(n,nfsPoly,m,B,M,K))	
 			smoothsCount += len(smooths)
 			print "total smooths: %s/%s" % (smoothsCount,K)
