@@ -28,8 +28,7 @@ def sieve_quadrant(q1,q2,I,J,basis,sieve,plog):
 			k += q2
 			i = a0*k+a1*l
 			j = b0*k+b1*l
-			
-			#print [i,j]
+		
 			if(i > I/2 or i < -I/2 or j > J/2 or j < -J/2):
 				break
 			
@@ -100,7 +99,10 @@ def sieve_special_q(q,s,I,J,rfBase,afBase,(n,nfsPoly,m,B,M,K)):
 	basis_q = find_lattice_basis(q,s)
 	basis_q = reduce_basis(basis_q[0],basis_q[1])
 	(qa0,qb0,qa1,qb1) = frankefy(basis_q)
-	
+	logB = math.log(B)	
+	lambd_a = 1.0
+	lambd_r = 1.0
+		
 	sieve = [[0.0] * (J) for i in range(I)]
 	print "sieving rational side..."
 	for prime in rfBase:
@@ -118,7 +120,25 @@ def sieve_special_q(q,s,I,J,rfBase,afBase,(n,nfsPoly,m,B,M,K)):
 		sieve_quadrant(1,-1,I,J,basis_r,sieve,plog)
 		sieve_quadrant(-1,1,I,J,basis_r,sieve,plog)
 		sieve_quadrant(-1,-1,I,J,basis_r,sieve,plog)
+
 	
+	for i in range(-I/2,I/2):
+		for j in range(-J/2,J/2):
+			ijgcd = abs(fractions.gcd(i,j))
+			if(ijgcd > 1):
+				continue
+				
+			a = qa0*i+qa1*j
+			b = qb0*i+qb1*j
+			if(a == 0 or b == 0):
+				continue
+
+			normRat = a+b*m
+			elog_r = math.log(abs(normRat))
+			sieveBound_r = elog_r-lambd_r*logB
+			if ((sieve[i+I/2-1][j+J/2-1] < (sieveBound_r))): 
+				sieve[i+I/2-1][j+J/2-1] = float('-inf')
+					
 	print "sieving algebraic side..."
 	for prime in afBase:
 		r = prime[0]
@@ -137,10 +157,7 @@ def sieve_special_q(q,s,I,J,rfBase,afBase,(n,nfsPoly,m,B,M,K)):
 	
 		
 	print "done sieving, doing trial division..."
-	lambd_a = 1.5
-	lambd_r = 1.5
 	smooths = []
-	logB = math.log(B)	
 	count = 0
 	candidates = 0
 	candidatesprev = 0
@@ -151,21 +168,28 @@ def sieve_special_q(q,s,I,J,rfBase,afBase,(n,nfsPoly,m,B,M,K)):
 				candidatesprev = candidates
 				print "%s smooths found out of %s candidates so far. i=%s j=%s" % (count,candidates,i,j)	
 			'''
+			if (sieve[i+I/2-1][j+J/2-1]<0):
+				continue
+			ijgcd = abs(fractions.gcd(i,j))
+			if(ijgcd != 1):
+				continue
+				
 			a = qa0*i+qa1*j
 			b = qb0*i+qb1*j
-			abgcd = fractions.gcd(a,b)
-			if(abgcd > 1 or abgcd < 0):
-				continue
 			if(a == 0 or b == 0):
 				continue
-
+				
+			abgcd = fractions.gcd(a,b)
+			if(abgcd != 1):
+				continue
+				
 			normRat = a+b*m
 			normAlg = NF(poly.Poly([a,b])).norm()/q
 			elog_a = math.log(abs(normAlg))
 			elog_r = math.log(abs(normRat))
 			sieveBound_a = elog_a-lambd_a*logB
 			sieveBound_r = elog_r-lambd_r*logB
-			if ((sieve[i+I/2-1][j+J/2-1] > (sieveBound_a+sieveBound_r))): 
+			if ((sieve[i+I/2-1][j+J/2-1] > (sieveBound_a+sieveBound_r))): 		
 				candidates += 1
 				if(etcmath.trialdivide(normAlg,afBase) and etcmath.trialdivide(normRat,rfBase)):		
 					count += 1
@@ -196,7 +220,7 @@ def main():
 			specialqFile.write(str([s,q])+"\n")
 			print "special_q: %s" % [q,s]
 			
-			I = 1024
+			I = 512
 			J = 512
 			smooths = sieve_special_q(q,s,I,J,rfBase,afBase,(n,nfsPoly,m,B,M,K))	
 			smoothsCount += len(smooths)

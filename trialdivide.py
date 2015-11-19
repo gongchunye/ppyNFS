@@ -9,19 +9,20 @@ if __name__ == '__main__':
 	
 	rfBase = files.loadFileArray("rfbase.txt")
 	afBase = files.loadFileArray("afbase.txt")
+	open("specialq.txt", "w")
 	
 	smoothsFile = open("smooths.txt", "w")
 	a = -M
-	b = -1
+	b = 1
 	smoothsCount = 0
 	while(smoothsCount < K):
 	
 		a += 1
 		if(a > M):
 			a = -M
-			b -= 1
+			b += 1
 			
-		if(fractions.gcd(abs(a),abs(b)) != 1):
+		if(fractions.gcd(a,b) != 1):
 			continue
 		
 		polyToTest = poly.Poly([a,b])

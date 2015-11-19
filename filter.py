@@ -60,6 +60,10 @@ def main():
 	print "%s duplicates removed."% (nOfSmooths-len(smooths))
 	nOfSmooths = len(smooths)
 	
+	if(len(smooths) < K+len(specialq)):
+		print "undersieved by %s." % ((K+len(specialq)) - len(smooths))
+		raise AssertionError
+	
 	while(len(smooths) > K+len(specialq)):
 		smooths.pop()
 		

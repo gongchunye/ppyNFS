@@ -13,7 +13,10 @@ def getPrimeExponents(value,base):
 		while(value % prime == 0):
 			primeExponents[baseIndex] += 1
 			value /= prime
-			
+	
+	if(abs(value) != 1):
+		print value
+		raise AssertionError
 	return primeExponents
 	
 def sumExponents(e1,e2):
@@ -91,7 +94,10 @@ if __name__ == '__main__':
 				smooth = smooths[ctr]
 				dependencySmooths.append(smooth)
 			ctr += 1
-			
+		
+		if(len(dependencySmooths) == 0):
+			continue
+		
 		primeExponents = getRatPrimeExponents(dependencySmooths,rfBase)
 		ratSide = getSqrtModNFromPrimeExponents(primeExponents,rfBase,n)
 		ratSide = (ratSide * nfsPolyDerivative.evaluate(m)) % n

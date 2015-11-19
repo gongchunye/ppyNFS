@@ -86,7 +86,7 @@ if __name__ == '__main__':
 	
 	print "Writing dependencies..."
 	for i in range(1,32):
-		dep = findDependency(matrix,random.randrange(2**K+1))
+		dep = findDependency(matrix,i)
 		deps.write(str(dep)+"\n")
 	deps.close()
 		
