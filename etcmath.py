@@ -144,6 +144,8 @@ def trialdivide(todivide, factorbase):
 	todivide = abs(todivide)
 	
 	for p in factorbase:
+		if(len(p) == 2):
+			p = p[1]
 		while(todivide % p == 0):
 			todivide = todivide/p
 		if(todivide == 1):

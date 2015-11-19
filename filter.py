@@ -36,6 +36,9 @@ def findRowValueFB(fb,row,n):
 			
 	return subfb
 	
+def hash(smooth):
+	return 314159265358979323*smooth[0]+ 271828182845904523*smooth[1] % 2**64
+	
 def main():
 	(n,nfsPoly,m,B,M,K) = files.loadParamsFile()
 	NF = poly.NumberField(poly.Poly(nfsPoly))
@@ -43,15 +46,46 @@ def main():
 	rfBase = files.loadFileArray("rfbase.txt")
 	afBase = files.loadFileArray("afbase.txt")
 	smooths = files.loadFileArray("smooths.txt")
+	specialq = files.loadFileArray("specialq.txt")
 	
+	nOfSmooths = len(smooths)
+
 	
+	#smooths = sorted(smooths,key=hash)
+	#smooths = sorted({hash(val): val for val in smooths}, key=hash)
+	smooths = sorted({hash(val): val for val in smooths}.values(), key=hash)
+	#for smooth in smooths:
+		#print smooth
+		
+	print "%s duplicates removed."% (nOfSmooths-len(smooths))
+	nOfSmooths = len(smooths)
 	
+	while(len(smooths) > K+len(specialq)):
+		smooths.pop()
+		
+	print "%s extra relations removed."% (nOfSmooths-len(smooths))
 	
+	smoothsFile = open("smooths-fil.txt", "w")
+	for smooth in smooths:
+		smoothsFile.write(str(smooth)+"\n")
+				
+	rfBaseFile = open("rfbase-fil.txt", "w")
+	for p in rfBase:
+		rfBaseFile.write(str(p)+"\n")				
+				
+	afBaseFile = open("afbase-fil.txt", "w")
+	for p in afBase:
+		afBaseFile.write(str(p)+"\n")
+	for p in specialq:
+		afBaseFile.write(str(p)+"\n")
+				
+
+	'''
 	matrixRowSum = calcRatMatrixRowsSum(rfBase,smooths,m,NF)
 	print matrixRowSum
 	print "\n"
 	print findRowValueFB(rfBase,matrixRowSum,0)
-	'''
+	
 	found = True
 	while(found = True):
 		found = False

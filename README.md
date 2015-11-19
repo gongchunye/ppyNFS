@@ -40,15 +40,16 @@ Also, stages that were not in the old code but would be nice to have in ppyNFS a
 
 [ ] matrix-lanc
 
-[ ] sieve-lat
+[X] sieve-lat
 
 [ ] sqrt-nguy
 
 The completed parts is enough to run a basic NFS factorization. To do this, run:
 		
-		python init.py
-		python trialdivide.py
-		python matrix-gauss.py
-		python sqrt-couv.py
+		init.py
+		sieve-lat.py
+		matrix-gauss.py
+		filter.py
+		sqrt-couv.py
 		
 LLL code is from https://github.com/kutio/liblll. Unless otherwise stated, the code is in public domain.

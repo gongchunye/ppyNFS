@@ -74,8 +74,12 @@ if __name__ == '__main__':
 	NF = poly.NumberField(poly.Poly(nfsPoly))
 	nfsPolyDerivative = poly.Poly(nfsPoly).derivative()
 	
-	rfBase = files.loadFileArray("rfbase.txt")
-	smooths = files.loadFileArray("smooths.txt")
+	rfBase = files.loadFileArray("rfbase-fil.txt")
+	rfBase = zip(*rfBase)[1] #grab only the primes
+	afBase = files.loadFileArray("afbase-fil.txt")
+	afBase = zip(*afBase)[1]
+	afBase = list(set(afBase)) # remove duplicates primes
+	smooths = files.loadFileArray("smooths-fil.txt")
 	deps = files.loadFileArray("deps.txt")
 	
 	primes = []
@@ -94,14 +98,14 @@ if __name__ == '__main__':
 		
 		couvBound = etcmath.calcRequiredPrimeLength(n,m,poly.Poly(nfsPoly),dependencySmooths)
 		(primes,prodPrimes) = generatePrimes(primes,poly.Poly(nfsPoly),couvBound)
-		primeExponents = getNormPrimeExponents(dependencySmooths,NF,rfBase)
+		primeExponents = getNormPrimeExponents(dependencySmooths,NF,afBase)
 		
 		sum = 0
 		for prime in primes:
 			print "%s/%s sqrt" % (primes.index(prime)+1,len(primes))
 			NFp = poly.NumberFieldModP(poly.Poly(nfsPoly),prime) 
 			
-			normModP = getSqrtModNFromPrimeExponents(primeExponents,rfBase,prime)
+			normModP = getSqrtModNFromPrimeExponents(primeExponents,afBase,prime)
 			normModP = (normModP*NFp(nfsPolyDerivative).norm()) % prime
 			
 			prod = NFp(poly.Poly([1]))

@@ -13,7 +13,9 @@ def getMatrixRowRat(smoothPoly,m,rfBase):
 			value /= prime
 			ctr = (ctr+1) % 2
 		matrixRow.append(ctr)
-		
+	if(abs(value) != 1):
+		print "unsmooth rational: %s" % value
+		raise AssertionError
 	return matrixRow
 	
 def getMatrixRowAlg(smoothPoly,NF,afBase):
@@ -31,6 +33,9 @@ def getMatrixRowAlg(smoothPoly,NF,afBase):
 				smoothNorm /= p	
 		matrixRow.append(ctr)
 		
+	if(abs(smoothNorm) != 1):
+		print "unsmooth norm: %s" % smoothNorm
+		raise AssertionError
 	return matrixRow
 
 def getMatrixRowQC(smoothPoly,qcBase):

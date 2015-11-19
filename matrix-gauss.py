@@ -1,6 +1,7 @@
 import poly
 import files
 import matrixmath
+import random
 	
 def gaussMatrix(matrix):
 	# TODO: implement proper pivot algorithm.
@@ -59,11 +60,12 @@ if __name__ == '__main__':
 	NF = poly.NumberField(poly.Poly(nfsPoly))
 	
 	
-	rfBase = files.loadFileArray("rfbase.txt")
-	afBase = files.loadFileArray("afbase.txt")
+	rfBase = files.loadFileArray("rfbase-fil.txt")
+	rfBase = zip(*rfBase)[1] #grab only the primes
+	afBase = files.loadFileArray("afbase-fil.txt")
 	qcBase = files.loadFileArray("qcbase.txt")
 	
-	smooths = files.loadFileArray("smooths.txt")
+	smooths = files.loadFileArray("smooths-fil.txt")
 	print "Building matrix..."
 	matrix = []
 	for smoothPair in smooths:
@@ -84,7 +86,7 @@ if __name__ == '__main__':
 	
 	print "Writing dependencies..."
 	for i in range(1,32):
-		dep = findDependency(matrix,i)
+		dep = findDependency(matrix,random.randrange(2**K+1))
 		deps.write(str(dep)+"\n")
 	deps.close()
 		

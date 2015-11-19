@@ -33,7 +33,7 @@ if __name__ == '__main__':
 	print "Generating af and rf bases..."	
 	for p in prefactorBase:
 		if(p > B): break
-		rfBaseFile.write(str(p)+"\n")
+		rfBaseFile.write(str([m%p,p])+"\n")
 		K += 1
 		roots = poly.getRootsModPFast(nfsPoly,p)
 		for root in roots:

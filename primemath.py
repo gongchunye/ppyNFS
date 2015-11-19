@@ -73,3 +73,9 @@ def generatePrimes(n): # sieve of eratosthenes
            for i in range(p * p, n + 1, p):
                sieve[i] = False
     return ps
+	
+def nextPrime(n): # sieve of eratosthenes
+    while(True):
+		n += 1
+		if isPrime(n) == True:
+			return n

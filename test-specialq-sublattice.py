@@ -42,7 +42,7 @@ def main():
 	nfspoly = poly.Poly([8,29,15,1])
 	NF = poly.NumberField(nfspoly)
 	while(True):
-		q = primemath.generateLargePrime(20)
+		q = primemath.generateLargePrime(10)
 		s = poly.getRootsModPFast(nfspoly,q)
 		if(len(s) > 0):
 			break
@@ -69,8 +69,8 @@ def main():
 	print "reduced basis: %s" % [[a0,b0],[a1,b1]]
 
 	print "generating lattice points..."
-	for i in range(-2,2):
-		for j in range(-2,2):
+	for i in range(-20,20):
+		for j in range(-20,20):
 			a = a0*i+a1*j
 			b = b0*i+b1*j
 			if(a == 0 or b == 0):
