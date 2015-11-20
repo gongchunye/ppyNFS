@@ -86,11 +86,13 @@ if __name__ == '__main__':
 	smooths = files.loadFileArray("smooths-fil.txt")
 	deps = files.loadFileArray("deps.txt")
 	
+	
 	tryAllDeps = False
 	if(len(sys.argv) == 2 and sys.argv[1] == "-a"):
 		tryAllDeps = True
 		print "Trying all dependencies..."
-		
+	
+	noncongruent = 0
 	success = 0
 	primes = []
 	for dependency in deps:
@@ -144,6 +146,7 @@ if __name__ == '__main__':
 		algSide = sum % n
 		
 		if(algSide**2 % n != ratSide**2 % n):
+			noncongruent += 1
 			print "Warning: not congruent."
 		
 		possibleFactor = fractions.gcd(n,abs(algSide-ratSide))
@@ -156,3 +159,4 @@ if __name__ == '__main__':
 			print "Trivial factor found, trying next dependency..."
 	
 	print "%s/%s successful factorizations." % (success,len(deps))
+	print "%s non-congruences." % noncongruent
