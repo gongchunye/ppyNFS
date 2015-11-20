@@ -205,7 +205,7 @@ def main():
 	smoothsFile = open("smooths.txt", "w")
 	smoothsCount = 0
 	q = B
-	K+=K/4
+	K+=K/10
 	
 	specialqFile = open("specialq.txt", "w")
 	while(smoothsCount < K):

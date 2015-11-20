@@ -5,6 +5,7 @@ import primemath
 import fractions
 import math
 import fractions
+import sys
 		
 def getPrimeExponents(value,base):
 	primeExponents = [0]*len(base)
@@ -27,14 +28,14 @@ def sumExponents(e1,e2):
 
 def getRatPrimeExponents(smooths,base):
 	primeExponents = [0]*len(base)
-	for i in range(len(smooths)):
-		smoothRat = poly.Poly(smooths[i]).evaluate(m)
+	for smooth in smooths:
+		smoothRat = smooth[0]+smooth[1]*m
 		smoothPrimeExponents = getPrimeExponents(smoothRat,base)
 		sumExponents(primeExponents,smoothPrimeExponents)
 		
 	return primeExponents
 	
-def getNormPrimeExponents(smooths,NF,base):
+def getAlgPrimeExponents(smooths,NF,base):
 	primeExponents = [0]*len(base)
 	for i in range(len(smooths)):
 		smoothNorm = NF(poly.Poly(smooths[i])).norm()
@@ -85,6 +86,12 @@ if __name__ == '__main__':
 	smooths = files.loadFileArray("smooths-fil.txt")
 	deps = files.loadFileArray("deps.txt")
 	
+	tryAllDeps = False
+	if(len(sys.argv) == 2 and sys.argv[1] == "-a"):
+		tryAllDeps = True
+		print "Trying all dependencies..."
+		
+	success = 0
 	primes = []
 	for dependency in deps:
 		dependencySmooths = []
@@ -104,7 +111,7 @@ if __name__ == '__main__':
 		
 		couvBound = etcmath.calcRequiredPrimeLength(n,m,poly.Poly(nfsPoly),dependencySmooths)
 		(primes,prodPrimes) = generatePrimes(primes,poly.Poly(nfsPoly),couvBound)
-		primeExponents = getNormPrimeExponents(dependencySmooths,NF,afBase)
+		primeExponents = getAlgPrimeExponents(dependencySmooths,NF,afBase)
 		
 		sum = 0
 		for prime in primes:
@@ -142,7 +149,10 @@ if __name__ == '__main__':
 		possibleFactor = fractions.gcd(n,abs(algSide-ratSide))
 		print "%s = %s*p" % (n,possibleFactor)
 		if(possibleFactor != 1 and possibleFactor != n):
-			break
+			success += 1
+			if(not(tryAllDeps)):
+				break
 		else:
 			print "Trivial factor found, trying next dependency..."
-		
+	
+	print "%s/%s successful factorizations." % (success,len(deps))

@@ -1,7 +1,7 @@
 import etcmath
 
 def getMatrixRowRat(smoothPoly,m,rfBase):
-	value = smoothPoly.evaluate(m)
+	value = smoothPoly.getCoeffs()[0]+smoothPoly.getCoeffs()[1]*m
 	matrixRow = []
 	if(value < 0):
 		matrixRow.append(1)
