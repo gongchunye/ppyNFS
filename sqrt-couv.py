@@ -96,6 +96,7 @@ if __name__ == '__main__':
 	success = 0
 	primes = []
 	for dependency in deps:
+		print "dependency %s/%s" % (deps.index(dependency)+1,len(deps))
 		dependencySmooths = []
 		ctr = 0
 		for column in dependency:
@@ -106,6 +107,8 @@ if __name__ == '__main__':
 		
 		if(len(dependencySmooths) == 0):
 			continue
+		
+		print "dependency has %s entries." % len(dependencySmooths) 
 		
 		primeExponents = getRatPrimeExponents(dependencySmooths,rfBase)
 		ratSide = getSqrtModNFromPrimeExponents(primeExponents,rfBase,n)

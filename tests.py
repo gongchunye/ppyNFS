@@ -326,6 +326,8 @@ class TestSequenceFunctions(unittest.TestCase):
 		correctRoots.sort()
 		testRoots.sort()
 		
+		self.assertEqual(len(correctRoots),len(testRoots))
+		
 		for i in range(len(correctRoots)):
 			self.assertEqual(correctRoots[i], testRoots[i])
 			
@@ -340,6 +342,8 @@ class TestSequenceFunctions(unittest.TestCase):
 		correctRoots.sort()
 		testRoots.sort()
 		
+		self.assertEqual(len(correctRoots),len(testRoots))
+		
 		for i in range(len(correctRoots)):
 			self.assertEqual(correctRoots[i], testRoots[i])
 			
@@ -352,6 +356,8 @@ class TestSequenceFunctions(unittest.TestCase):
 
 		correctRoots.sort()
 		testRoots.sort()
+		
+		self.assertEqual(len(correctRoots),len(testRoots))
 		
 		for i in range(len(correctRoots)):
 			self.assertEqual(correctRoots[i], testRoots[i])
@@ -366,6 +372,8 @@ class TestSequenceFunctions(unittest.TestCase):
 		correctRoots.sort()
 		testRoots.sort()
 		
+		self.assertEqual(len(correctRoots),len(testRoots))
+		
 		for i in range(len(correctRoots)):
 			self.assertEqual(correctRoots[i], testRoots[i])
 		
@@ -378,6 +386,8 @@ class TestSequenceFunctions(unittest.TestCase):
 
 		correctRoots.sort()
 		testRoots.sort()
+		
+		self.assertEqual(len(correctRoots),len(testRoots))
 		
 		for i in range(len(correctRoots)):
 			self.assertEqual(correctRoots[i], testRoots[i])
@@ -418,7 +428,53 @@ class TestSequenceFunctions(unittest.TestCase):
 		NF = poly.NumberField(poly.Poly([8,29,15,1]))
 		smoothElement = NF(poly.Poly([-8,3]))
 		self.assertEqual(smoothElement.norm(),-5696)
-	
+		
+	def test_divisors(self):
+		n = 120
+		correctDivisors = [1,2,3,4,5,6,8,10,12,15,20,24,30,40,60,120]
+		testDivisors = nfspolygen.findDivisors(n)
+		
+		correctDivisors.sort()
+		testDivisors.sort()
+		
+		self.assertEqual(len(correctDivisors),len(testDivisors))
+		for i in range(len(correctDivisors)):
+			self.assertEqual(correctDivisors[i], testDivisors[i])
+			
+	def test_divisors2(self):
+		n = 72
+		correctDivisors = [1, 2, 3, 4, 6, 8, 9, 12, 18, 24, 36, 72]
+		testDivisors = nfspolygen.findDivisors(n)
+		
+		correctDivisors.sort()
+		testDivisors.sort()
+		
+		self.assertEqual(len(correctDivisors),len(testDivisors))
+		for i in range(len(correctDivisors)):
+			self.assertEqual(correctDivisors[i], testDivisors[i])
+			
+	def test_divisors_corner1(self):
+		correctDivisors = [1]
+		testDivisors = nfspolygen.findDivisors(1)
+		
+		correctDivisors.sort()
+		testDivisors.sort()
+		
+		self.assertEqual(len(correctDivisors),len(testDivisors))
+		for i in range(len(correctDivisors)):
+			self.assertEqual(correctDivisors[i], testDivisors[i])
+		
+	def test_divisors_corner2(self):
+		correctDivisors = [1,2]
+		testDivisors = nfspolygen.findDivisors(2)
+		
+		correctDivisors.sort()
+		testDivisors.sort()
+
+		self.assertEqual(len(correctDivisors),len(testDivisors))
+		for i in range(len(correctDivisors)):
+			self.assertEqual(correctDivisors[i], testDivisors[i])
+			
 if __name__ == '__main__':
 	unittest.main()
 	

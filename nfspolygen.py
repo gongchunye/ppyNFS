@@ -1,18 +1,47 @@
 import primemath
 import poly
 import math
-
-
-def findSmallFactors(n):
-	n = abs(n)
-	factors = [1,n]
-	i = 2 
-	while(i < n):
-		if(n % i == 0):
-			factors.append(i)
-		i += 1	
+import etcmath
+	
+def findDivisors(n):
+	if(n < 0):
+		raise AssertionError()
+	if(n == 1):
+		return [1]
+	if(n == 2):
+		return [1,2]
 		
-	return factors
+	probPrimes = primemath.generatePrimes(etcmath.isqrt(n))
+	primes = []
+	for p in probPrimes:
+		if(n%p==0):
+			primes.append(p)
+	
+	primeExp = [0]*len(primes)
+	for p in primes:
+		while(n%p==0):
+			n /= p
+			primeExp[primes.index(p)] += 1
+	
+	primeExpC = [0]*len(primes)
+	
+	divisors = [1]
+	while(True):
+		i = 0
+		while(True):
+			primeExpC[i] += 1
+			if(primeExpC[i] <= primeExp[i]):
+				break
+			primeExpC[i] = 0
+			i += 1
+			if(i >= len(primes)):
+				return divisors
+		
+		d = 1
+		for p in primes:
+			d *= p**primeExpC[primes.index(p)]
+			
+		divisors.append(d)
 	
 def shrinkNfsPoly(poly,m):
 	# bound coeffs from -m/2 to m/2.
@@ -34,7 +63,7 @@ def generateNFSPoly(n,d):
 	return (m,nfsPoly)
 	
 def reducible(poly):
-	possibleRoots = findSmallFactors(poly.coeffs[0])
+	possibleRoots = findDivisors(abs(poly.coeffs[0]))
 	for root in possibleRoots:
 		if(poly.evaluate(root) == 0 or poly.evaluate(-root) == 0):
 			return True

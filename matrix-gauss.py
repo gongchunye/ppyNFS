@@ -85,7 +85,7 @@ if __name__ == '__main__':
 	deps = open("deps.txt", "w")
 	
 	print "Writing dependencies..."
-	for i in range(1,32):
+	for i in range(1,33):
 		dep = findDependency(matrix,i)
 		deps.write(str(dep)+"\n")
 	deps.close()
