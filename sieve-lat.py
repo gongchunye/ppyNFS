@@ -100,8 +100,8 @@ def sieve_special_q(q,s,I,J,rfBase,afBase,(n,nfsPoly,m,B,M,K)):
 	basis_q = reduce_basis(basis_q[0],basis_q[1])
 	(qa0,qb0,qa1,qb1) = frankefy(basis_q)
 	logB = math.log(B)	
-	lambd_a = .7
-	lambd_r = .7
+	lambd_a = 1.5
+	lambd_r = 1.5
 		
 	sieve = [[0.0] * (J) for i in range(I)]
 	print "sieving rational side..."
@@ -184,16 +184,20 @@ def sieve_special_q(q,s,I,J,rfBase,afBase,(n,nfsPoly,m,B,M,K)):
 				continue
 				
 			normRat = a+b*m
-			normAlg = NF(poly.Poly([a,b])).norm()/q
-			elog_a = math.log(abs(normAlg))
 			elog_r = math.log(abs(normRat))
-			sieveBound_a = elog_a-lambd_a*logB
 			sieveBound_r = elog_r-lambd_r*logB
-			if ((sieve[i+I/2-1][j+J/2-1] > (sieveBound_a+sieveBound_r))): 		
-				candidates += 1
-				if(etcmath.trialdivide(normAlg,afBase) and etcmath.trialdivide(normRat,rfBase)):		
-					count += 1
-					smooths.append([a,b])
+			
+			if (sieve[i+I/2-1][j+J/2-1] > sieveBound_r): 		
+			
+				normAlg = NF(poly.Poly([a,b])).norm()/q
+				elog_a = math.log(abs(normAlg))
+				sieveBound_a = elog_a-lambd_a*logB
+				
+				if (sieve[i+I/2-1][j+J/2-1] > sieveBound_a+sieveBound_r): 		
+					candidates += 1
+					if(etcmath.trialdivide(normAlg,afBase) and etcmath.trialdivide(normRat,rfBase)):		
+						count += 1
+						smooths.append([a,b])
 					
 	print "%s smooths found out of %s candidates." % (count,candidates)
 	return smooths
@@ -221,7 +225,7 @@ def main():
 			print "special_q: %s" % [q,s]
 			
 			I = 1024
-			J = 1024
+			J = 512
 			smooths = sieve_special_q(q,s,I,J,rfBase,afBase,(n,nfsPoly,m,B,M,K))	
 			smoothsCount += len(smooths)
 			print "total smooths: %s/%s" % (smoothsCount,K)

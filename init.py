@@ -5,7 +5,7 @@ import primemath
 import math
 
 if __name__ == '__main__':
-	semiprimeSize = 32
+	semiprimeSize = 64
 	n = primemath.generateLargePrime(semiprimeSize/2)*primemath.generateLargePrime(semiprimeSize/2)
 	print "n = %s" % (n)
 	
