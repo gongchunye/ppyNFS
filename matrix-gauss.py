@@ -63,7 +63,7 @@ if __name__ == '__main__':
 	rfBase = files.loadFileArray("rfbase-fil.txt")
 	rfBase = zip(*rfBase)[1] #grab only the primes
 	afBase = files.loadFileArray("afbase-fil.txt")
-	qcBase = files.loadFileArray("qcbase.txt")
+	qcBase = matrixmath.generateQCBase(n,afBase[-1][1],poly.Poly(nfsPoly))
 	
 	smooths = files.loadFileArray("smooths-fil.txt")
 	print "Building matrix..."

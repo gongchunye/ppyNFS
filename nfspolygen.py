@@ -10,6 +10,8 @@ def findDivisors(n):
 		return [1]
 	if(n == 2):
 		return [1,2]
+	if(primemath.isPrime(n)):
+		return [1,n]
 		
 	probPrimes = primemath.generatePrimes(etcmath.isqrt(n))
 	primes = []

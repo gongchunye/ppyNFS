@@ -474,6 +474,29 @@ class TestSequenceFunctions(unittest.TestCase):
 		self.assertEqual(len(correctDivisors),len(testDivisors))
 		for i in range(len(correctDivisors)):
 			self.assertEqual(correctDivisors[i], testDivisors[i])
+
+		
+	def test_divisors_corner2(self):
+		correctDivisors = [1,2]
+		testDivisors = nfspolygen.findDivisors(2)
+		
+		correctDivisors.sort()
+		testDivisors.sort()
+
+		self.assertEqual(len(correctDivisors),len(testDivisors))
+		for i in range(len(correctDivisors)):
+			self.assertEqual(correctDivisors[i], testDivisors[i])			
+			
+	def test_divisors_corner2(self):
+		correctDivisors = [1,73]
+		testDivisors = nfspolygen.findDivisors(73)
+		
+		correctDivisors.sort()
+		testDivisors.sort()
+
+		self.assertEqual(len(correctDivisors),len(testDivisors))
+		for i in range(len(correctDivisors)):
+			self.assertEqual(correctDivisors[i], testDivisors[i])			
 			
 if __name__ == '__main__':
 	unittest.main()

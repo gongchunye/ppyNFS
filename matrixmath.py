@@ -1,4 +1,7 @@
 import etcmath
+import math
+import primemath
+import poly
 
 def getMatrixRowRat(smoothPoly,m,rfBase):
 	value = smoothPoly.getCoeffs()[0]+smoothPoly.getCoeffs()[1]*m
@@ -66,3 +69,14 @@ def addRow(matrix,i,j):
 def printMatrix(matrix):
 	for row in matrix:
 		print row		
+		
+def generateQCBase(n,p,nfsPoly):
+	qcbase = []
+	while(len(qcbase) < 3*math.log(n,10)):
+		p = primemath.nextPrime(p)
+		roots = poly.getRootsModPFast(nfsPoly,p)
+		for root in roots:
+			if(nfsPoly.derivative().evaluate(root) % p != 0):
+				qcbase.append([root,p])
+	return qcbase	
+		

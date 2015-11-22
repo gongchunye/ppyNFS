@@ -6,7 +6,7 @@ import math
 
 if __name__ == '__main__':
 	semiprimeSize = 64
-	n = primemath.generateLargePrime(semiprimeSize/2)*primemath.generateLargePrime(semiprimeSize/2)
+	n = primemath.generateLargePrime(semiprimeSize/2)*primemath.generateLargePrime(semiprimeSize/2)	
 	print "n = %s" % (n)
 	
 	d = 3
@@ -14,19 +14,9 @@ if __name__ == '__main__':
 	print "Using poly %s, m = %s" % (nfsPoly,m)
 	B = M = etcmath.calculateB(n)
 	print "Using bound %s" % B
-	prefactorBase = primemath.generatePrimes(B*2)
+	prefactorBase = primemath.generatePrimes(B)
 	
-	qcBaseFile = open("qcbase.txt", "w")
-	K = 0
-	print "Generating qc base..."
-	while(K < 3*math.log(n,10)):
-		p = prefactorBase.pop()
-		roots = poly.getRootsModPFast(nfsPoly,p)
-		for root in roots:
-			if(nfsPoly.derivative().evaluate(root) % p != 0):
-				qcBaseFile.write(str([root,p])+"\n")
-				K += 1
-	qcBaseFile.close()
+	K = (int)(3*math.log(n,10)) # for quadratic characters
 	
 	afBaseFile = open("afbase.txt", "w")
 	rfBaseFile = open("rfbase.txt", "w")
