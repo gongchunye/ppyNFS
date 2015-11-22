@@ -51,6 +51,8 @@ def getMatrixRowQC(smoothPoly,qcBase):
 			matrixRow.append(0)
 		elif(c == -1):
 			matrixRow.append(1)
+		elif(c == 0):
+			raise AssertionError
 			
 	return matrixRow
 			
