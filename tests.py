@@ -487,7 +487,7 @@ class TestSequenceFunctions(unittest.TestCase):
 		for i in range(len(correctDivisors)):
 			self.assertEqual(correctDivisors[i], testDivisors[i])			
 			
-	def test_divisors_corner2(self):
+	def test_divisors_corner3(self):
 		correctDivisors = [1,73]
 		testDivisors = nfspolygen.findDivisors(73)
 		
