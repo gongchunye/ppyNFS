@@ -48,8 +48,8 @@ The completed parts is enough to run a basic NFS factorization. To do this, run:
 		
 		init.py
 		sieve-lat.py
-		matrix-gauss.py
 		filter.py
+		matrix-gauss.py
 		sqrt-couv.py
 		
 LLL code is from https://github.com/kutio/liblll. Unless otherwise stated, the code is in public domain.
