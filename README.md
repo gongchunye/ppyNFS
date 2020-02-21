@@ -46,10 +46,11 @@ Also, stages that were not in the old code but would be nice to have in ppyNFS a
 
 The completed parts is enough to run a basic NFS factorization. To do this, run:
 		
-		init.py
-		sieve-lat.py
-		filter.py
-		matrix-gauss.py
-		sqrt-couv.py
-		
+python2.7		init.py
+python2.7		sieve-lat.py
+python2.7		filter.py
+python2.7		matrix-gauss.py
+python2.7		sqrt-couv.py
+
+can not run with python3
 LLL code is from https://github.com/kutio/liblll. Unless otherwise stated, the code is in public domain.
